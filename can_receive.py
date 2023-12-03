@@ -1,6 +1,8 @@
 import subprocess
 import threading
 import queue
+import pickle
+import socket
 
 # CANデータの読み取りを行うスレッドの関数
 def read_can_data(q):
@@ -30,6 +32,16 @@ def can_receive():
             data = data_queue.get().split(' ')  # キューからデータを取得し、スペースで分割
             filtered_data = [elem for i, elem in enumerate(data) if i not in exclude_indics]
             print(filtered_data)  # 分割されたデータのリストを出力
+
+            # Pickleを使用してデータをファイルに保存
+            with open('can_data.pkl', 'wb') as file:
+                pickle.dump(filtered_data, file)
+
+            # ソケットを使用してmain_visual.pyに通知
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect(('localhost', 12345))
+                s.sendall(b'Data updated')
+        
 
 if __name__ == "__main__":
     can_receive()
