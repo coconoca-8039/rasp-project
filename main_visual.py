@@ -4,6 +4,7 @@ import sys
 import time
 import sched
 from can_0A1224AA import can_get_0A1224AA
+from can_0CCC2222 import can_get_0CCC2222
 
 def handle_client(mq):
     while True:
@@ -17,6 +18,11 @@ def handle_client(mq):
             # ここの処理を６時間おきとかで実行する
             if can_data[2] == '0A1234AA':
                 tmp = can_get_0A1224AA(can_data, '0A1234AA')
+                print(tmp)
+                print("  ")
+            
+            if can_data[2] == '0CCC2222':
+                tmp = can_get_0CCC2222(can_data, '0CCC2222')
                 print(tmp)
                 print("  ")
             
