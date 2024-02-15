@@ -15,16 +15,19 @@ def handle_client(mq):
              
             # print(can_data)  # 受信したデータを全表示
             
-            # ここの処理を６時間おきとかで実行する
+            # ここの処理を６時間おきとかで実行したい
             if can_data[2] == '0A1234AA':
-                tmp = can_get_0A1224AA(can_data, '0A1234AA')
-                print(tmp)
-                print("  ")
+                can_0A1234AA = can_get_0A1224AA(can_data, '0A1234AA')
+                # print(can_0A1234AA)
+                # print("  ")
             
             if can_data[2] == '0CCC2222':
-                tmp = can_get_0CCC2222(can_data, '0CCC2222')
-                print(tmp)
-                print("  ")
+                can_0CCC2222 = can_get_0CCC2222(can_data, '0CCC2222')
+                # print(can_0CCC2222)
+                # print("  ")
+                
+            print(can_0A1234AA + can_0CCC2222)
+            print("")
             
         except posix_ipc.BusyError:
             print("Message queue is full, skipping this message.")
