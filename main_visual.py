@@ -3,10 +3,18 @@ import posix_ipc
 import sys
 import time
 import sched
+import sqlite3
 from can_0A1224AA import can_get_0A1224AA
 from can_0CCC2222 import can_get_0CCC2222
 
 def handle_client(mq):
+
+    # この部分はまだ試作これから作り込む
+    # can_functions = {
+    	# '0A1234AA': can_get_0A1234AA,
+    	# '0CCC2222': can_get_0CCC2222
+    # }
+    
     while True:
         try:
             message, _ = mq.receive()
@@ -14,6 +22,9 @@ def handle_client(mq):
             # print(type(can_data))
              
             # print(can_data)  # 受信したデータを全表示
+            
+            # ここでSqliteにデータを格納する
+            # insert_climate_data()
             
             # ここの処理を６時間おきとかで実行したい
             if can_data[2] == '0A1234AA':
