@@ -2,13 +2,14 @@ import os
 import posix_ipc
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import sched
 import sqlite3
 from can_0A1224AA import can_get_0A1224AA
 from can_0CCC2222 import can_get_0CCC2222
 from can_1777DDDD import can_get_1777DDDD
 from can_1888DDDD import can_get_1888DDDD
+from ClimateData import insert_climate_data
 
 tempture_avg = []
 humidity_avg = []
@@ -29,12 +30,20 @@ def handle_client(mq):
     	# '0CCC2222': can_get_0CCC2222
     # }
     
+    function_executed = False
+    target_time = datetime.now() + timedelta(seconds=30)
+    start_time = time.time()
+    
     while True:
         try:
             message, _ = mq.receive()
             can_data = message.decode().split(' ')
             # print(type(can_data))
             # print(can_data)  # 受信したデータを全表示
+            
+            elapsed_time = time.time() - start_time
+            elapsed_time = round(elapsed_time, 2)
+            print(f"経過時間：{elapsed_time}秒")
             
             if can_data[2] == '0A1234AA':
                 can_0A1234AA = can_get_0A1224AA(can_data, '0A1234AA')
@@ -156,13 +165,22 @@ def handle_client(mq):
             if len(z_direction_avg) > 10:
             	z_direction_avg.pop(0)
             
-            # １時間に1度だけ実行する処理
-            current_time = datetime.now()
+            
+            # insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
+            # mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
+            
+            if datetime.now() >= target_time and not function_executed:
+            	insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
+            	mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
+            	print("")
+            	print("**********処理実行**********")
+            	print("")
+            	function_executed = True
+            		
+            current_time = datetime.now()		
             if current_time.minute == 0 and current_time.second == 0:
-            	print('Kotoha')
-            	# ここでSqliteにデータを格納する
-            	# この別スレッドにしたほうがいいかも
-            	# insert_climate_data()
+            	insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
+            	mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
             
         except posix_ipc.BusyError:
             print("Message queue is full, skipping this message.")

@@ -1,10 +1,12 @@
 import sqlite3
+# import threading
+from datetime import datetime
 
 def insert_climate_data(
-    timestamp, temperature, humidity, pressure,
+    temperature, humidity, pressure,
     latitude, longitude, elevation, satellite_count,
-    x_direction, y_direction, z_direction
-):
+    x_direction, y_direction, z_direction):
+
     con = sqlite3.connect("ClimateData.db")
     cursor = con.cursor()
 
@@ -26,6 +28,7 @@ def insert_climate_data(
     """
 
     try:
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # ここだけは平均化する必要ないからね
         cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (?)", (timestamp,))              # Timestampの挿入
         cursor.execute("INSERT INTO ClimateData (Temperature) VALUES (?)", (temperature,))          # Temperatureの挿入
         cursor.execute("INSERT INTO ClimateData (Humidity) VALUES (?)", (humidity,))                # Humidityの挿入
