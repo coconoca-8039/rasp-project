@@ -31,7 +31,7 @@ def handle_client(mq):
     # }
     
     function_executed = False
-    target_time = datetime.now() + timedelta(seconds=30)
+    target_time = datetime.now() + timedelta(seconds=20)
     start_time = time.time()
     
     while True:
@@ -169,13 +169,13 @@ def handle_client(mq):
             # insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
             # mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
             
-            if datetime.now() >= target_time and not function_executed:
-            	insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
-            	mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
-            	print("")
-            	print("**********処理実行**********")
-            	print("")
-            	function_executed = True
+            #if datetime.now() >= target_time and not function_executed:
+            	#insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
+            	#mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
+            	#print("")
+            	#print("**********処理実行**********")
+            	#print("")
+            	# function_executed = True
             		
             current_time = datetime.now()		
             if current_time.minute == 0 and current_time.second == 0:

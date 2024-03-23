@@ -13,7 +13,7 @@ def insert_climate_data(
     create_climate_table_query = """
     CREATE TABLE IF NOT EXISTS ClimateData (
         DataId INTEGER PRIMARY KEY AUTOINCREMENT,
-        Timestamp TEXT NOT NULL,
+        Timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         Temperature REAL,
         Humidity REAL,
         Pressure REAL,
@@ -26,10 +26,14 @@ def insert_climate_data(
         ZDirection REAL
     )
     """
+    
+    cursor.execute(create_climate_table_query)
 
     try:
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # ここだけは平均化する必要ないからね
-        cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (?)", (timestamp,))              # Timestampの挿入
+        #timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # ここだけは平均化する必要ないからね
+        #print(timestamp)
+        #timestamp_str = str(timestamp)
+        cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (CURRENT_TIMESTAMP)")              # Timestampの挿入
         cursor.execute("INSERT INTO ClimateData (Temperature) VALUES (?)", (temperature,))          # Temperatureの挿入
         cursor.execute("INSERT INTO ClimateData (Humidity) VALUES (?)", (humidity,))                # Humidityの挿入
         cursor.execute("INSERT INTO ClimateData (Pressure) VALUES (?)", (pressure,))                # Pressureの挿入
@@ -41,8 +45,9 @@ def insert_climate_data(
         cursor.execute("INSERT INTO ClimateData (YDirection) VALUES (?)", (y_direction,))           # YDirectionの挿入
         cursor.execute("INSERT INTO ClimateData (ZDirection) VALUES (?)", (z_direction,))           # ZDirectionの挿入
 
-    except sqlite3.Error:
-        con.rollback()
+    except sqlite3.Error as e:
+    	print(f"SQLite error: {e}")
+    	con.rollback()
 
     else:
         con.commit()
