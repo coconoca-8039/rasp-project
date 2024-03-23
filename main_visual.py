@@ -10,6 +10,17 @@ from can_0CCC2222 import can_get_0CCC2222
 from can_1777DDDD import can_get_1777DDDD
 from can_1888DDDD import can_get_1888DDDD
 
+tempture_avg = []
+humidity_avg = []
+pressure_avg = []
+latitude_avg = []
+longitude_avg =[]
+elevation_avg = []
+satellite_count_avg = []
+x_direction_avg = []
+y_direction_avg =[]
+z_direction_avg =[]
+
 def handle_client(mq):
 
     # この部分はまだ試作これから作り込む
@@ -23,40 +34,135 @@ def handle_client(mq):
             message, _ = mq.receive()
             can_data = message.decode().split(' ')
             # print(type(can_data))
-             
             # print(can_data)  # 受信したデータを全表示
             
-            # １時間に1度だけ実行する処理
-            # current_time = datetime.now()
-            # if current_time.minute == 0 || current_time.second == 0:           
-            	# ここでSqliteにデータを格納する
-            	# この別スレッドにしたほうがいいかも
-            	# insert_climate_data()
-            
-            # ここの処理を６時間おきとかで実行したい
             if can_data[2] == '0A1234AA':
                 can_0A1234AA = can_get_0A1224AA(can_data, '0A1234AA')
+                
+                tempture = can_0A1234AA[0]
+                tempture = float(tempture.replace(" ℃", ""))
+                tempture_avg.append(tempture)
+                
+                humidity = can_0A1234AA[1]
+                humidity = float(humidity.replace(" %", ""))
+                humidity_avg.append(humidity)
+                
+                pressure = can_0A1234AA[2]
+                pressure = float(pressure.replace(" hPa", ""))
+                pressure_avg.append(pressure)
+            	
                 # print(can_0A1234AA)
                 # print("  ")
             
             if can_data[2] == '0CCC2222':
                 can_0CCC2222 = can_get_0CCC2222(can_data, '0CCC2222')
+                
+                xaxis = can_0CCC2222[0]
+                xaxis = float(xaxis.replace("X方向 ", ""))
+                x_direction_avg.append(xaxis)
+                
+                yaxis = can_0CCC2222[1]
+                yaxis = float(yaxis.replace("Y方向 ", ""))
+                y_direction_avg.append(yaxis)
+                
+                zaxis = can_0CCC2222[2]
+                zaxis = float(zaxis.replace("Z方向 ", ""))
+                z_direction_avg.append(zaxis)
+            	
                 # print(can_0CCC2222)
                 # print("  ")
                 
             if can_data[2] == '1888DDDD':
                 can_1888DDDD = can_get_1888DDDD(can_data, '1888DDDD')
+                
+                satellites = can_1888DDDD[0]
+                satellites = int(satellites.replace("衛星数：", ""))
+                satellite_count_avg.append(satellites)
+                
+                altitude = can_1888DDDD[1]
+                altitude = float(altitude.replace("標高：", ""))
+                elevation_avg.append(altitude)
+            	
                 # print(can_1888DDDD)
                 # print("  ")
              
             if can_data[2] == '1777DDDD':
                 can_1777DDDD = can_get_1777DDDD(can_data, '1777DDDD')
+                
+                longitude = can_1777DDDD[0]
+                longitude = float(longitude.replace("経度：", ""))
+                longitude_avg.append(longitude)
+                
+                latitude = can_1777DDDD[1]
+                latitude = float(latitude.replace("緯度：", ""))
+                latitude_avg.append(latitude)
+            	
                 # print(can_1777DDDD)
                 # print("  ")
                 
+            # コンソールへの表示
             print(can_0A1234AA + can_0CCC2222)
             print(can_1888DDDD + can_1777DDDD)
             print("")
+            
+            # リストのデータ数を10件に保つ処理
+            mean_tempture = round(sum(tempture_avg) / len(tempture_avg), 2)
+            print(f"温度の平均：{mean_tempture}")
+            if len(tempture_avg) > 10:
+            	tempture_avg.pop(0)
+            	
+            mean_humidity = round(sum(humidity_avg) / len(humidity_avg), 2)
+            print(f"湿度の平均：{mean_humidity}")
+            if len(humidity_avg) > 10:
+            	humidity_avg.pop(0)
+            	
+            mean_pressure = round(sum(pressure_avg) / len(pressure_avg), 2)
+            print(f"気圧の平均：{mean_pressure}")
+            if len(pressure_avg) > 10:
+            	pressure_avg.pop(0)
+            	
+            mean_latitude = round(sum(latitude_avg) / len(latitude_avg), 2)
+            print(f"緯度の平均：{mean_latitude}")
+            if len(latitude_avg) > 10:
+            	latitude_avg.pop(0)
+            	
+            mean_longitude = round(sum(longitude_avg) / len(longitude_avg), 2)
+            print(f"経度の平均：{mean_longitude}")
+            if len(longitude_avg) > 10:
+            	longitude_avg.pop(0)
+            	
+            mean_elevation = round(sum(elevation_avg) / len(elevation_avg), 2)
+            print(f"標高の平均：{mean_elevation}")
+            if len(elevation_avg) > 10:
+            	elevation_avg.pop(0)
+            	
+            mean_satellite_count = round(sum(satellite_count_avg) / len(satellite_count_avg), 2)
+            print(f"衛星捕捉の平均：{mean_satellite_count}")
+            if len(satellite_count_avg) > 10:
+            	satellite_count_avg.pop(0)
+            	
+            mean_x_direction = round(sum(x_direction_avg) / len(x_direction_avg), 2)
+            print(f"X方向の平均：{mean_x_direction}")
+            if len(x_direction_avg) > 10:
+            	x_direction_avg.pop(0)
+            	
+            mean_y_direction = round(sum(y_direction_avg) / len(y_direction_avg), 2)
+            print(f"Y方向の平均：{mean_y_direction}")
+            if len(y_direction_avg) > 10:
+            	y_direction_avg.pop(0)
+            	
+            mean_z_direction = round(sum(z_direction_avg) / len(z_direction_avg), 2)
+            print(f"Z方向の平均：{mean_z_direction}")
+            if len(z_direction_avg) > 10:
+            	z_direction_avg.pop(0)
+            
+            # １時間に1度だけ実行する処理
+            current_time = datetime.now()
+            if current_time.minute == 0 and current_time.second == 0:
+            	print('Kotoha')
+            	# ここでSqliteにデータを格納する
+            	# この別スレッドにしたほうがいいかも
+            	# insert_climate_data()
             
         except posix_ipc.BusyError:
             print("Message queue is full, skipping this message.")

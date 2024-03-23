@@ -14,10 +14,11 @@ def can_get_1888DDDD(can_data, target):
 	altitude_byte1 = int(can_data[6], 16)
 	altitude_byte2 = int(can_data[7], 16)
 	
-	satellites = f"衛星数 {satellites}"
+	satellites = f"衛星数：{satellites}"
 	
 	altitude = (altitude_byte1 << 8) | altitude_byte2
-	altitude = f"標高 {altitude}"
+	altitude = altitude / 100
+	altitude = f"標高：{altitude}"
 	
 	result.append(satellites)
 	result.append(altitude)
