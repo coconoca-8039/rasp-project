@@ -7,6 +7,8 @@ import sched
 import sqlite3
 from can_0A1224AA import can_get_0A1224AA
 from can_0CCC2222 import can_get_0CCC2222
+from can_1777DDDD import can_get_1777DDDD
+from can_1888DDDD import can_get_1888DDDD
 
 def handle_client(mq):
 
@@ -25,10 +27,10 @@ def handle_client(mq):
             # print(can_data)  # 受信したデータを全表示
             
             # １時間に1度だけ実行する処理
-            current_time = datetime.now()
-            if current_time.minute == 0 || current_time.second == 0:           
+            # current_time = datetime.now()
+            # if current_time.minute == 0 || current_time.second == 0:           
             	# ここでSqliteにデータを格納する
-            	# この処理は別スレッドにしたほうがいいかも
+            	# この別スレッドにしたほうがいいかも
             	# insert_climate_data()
             
             # ここの処理を６時間おきとかで実行したい
@@ -42,7 +44,18 @@ def handle_client(mq):
                 # print(can_0CCC2222)
                 # print("  ")
                 
+            if can_data[2] == '1888DDDD':
+                can_1888DDDD = can_get_1888DDDD(can_data, '1888DDDD')
+                # print(can_1888DDDD)
+                # print("  ")
+             
+            if can_data[2] == '1777DDDD':
+                can_1777DDDD = can_get_1777DDDD(can_data, '1777DDDD')
+                # print(can_1777DDDD)
+                # print("  ")
+                
             print(can_0A1234AA + can_0CCC2222)
+            print(can_1888DDDD + can_1777DDDD)
             print("")
             
         except posix_ipc.BusyError:
