@@ -13,7 +13,7 @@ def insert_climate_data(
     create_climate_table_query = """
     CREATE TABLE IF NOT EXISTS ClimateData (
         DataId INTEGER PRIMARY KEY AUTOINCREMENT,
-        Timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        Timestamp TEXT NOT NULL,
         Temperature REAL,
         Humidity REAL,
         Pressure REAL,
@@ -28,12 +28,14 @@ def insert_climate_data(
     """
     
     cursor.execute(create_climate_table_query)
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # ここだけは平均化する必要ないからね
+    print(timestamp)
+    timestamp_str = str(timestamp)
 
     try:
-        #timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # ここだけは平均化する必要ないからね
-        #print(timestamp)
-        #timestamp_str = str(timestamp)
-        cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (CURRENT_TIMESTAMP)")              # Timestampの挿入
+        cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (timestamp_str)")
+        # cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (CURRENT_TIMESTAMP)")            # Timestampの挿入
+        # cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (datetime(CURRENT_TIMESTAMP, '+9 hours'))")
         cursor.execute("INSERT INTO ClimateData (Temperature) VALUES (?)", (temperature,))          # Temperatureの挿入
         cursor.execute("INSERT INTO ClimateData (Humidity) VALUES (?)", (humidity,))                # Humidityの挿入
         cursor.execute("INSERT INTO ClimateData (Pressure) VALUES (?)", (pressure,))                # Pressureの挿入
