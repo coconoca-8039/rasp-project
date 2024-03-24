@@ -31,6 +31,7 @@ def handle_client(mq):
     # }
     
     function_executed = False
+    executed = False
     target_time = datetime.now() + timedelta(seconds=15)
     start_time = time.time()
     
@@ -182,13 +183,18 @@ def handle_client(mq):
             		# file.write(f"{writing_time}\n")
             		
             current_time = datetime.now()		
-            if current_time.minute == 0 and current_time.second == 0:
+            if current_time.minute == 0 and current_time.second == 0 and not executed:
             	insert_climate_data(mean_tempture, mean_humidity, mean_pressure, mean_latitude, mean_longitude,
             	mean_elevation, mean_satellite_count, mean_x_direction, mean_y_direction, mean_z_direction)
             	
             	writing_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             	with open('history.txt', 'a') as file:
             		file.write(f"{writing_time}\n")
+            	
+            	executed = True
+            
+            if current_time.minute == 1 and current_time.second == 0:
+            	executed = False
             
         except posix_ipc.BusyError:
             print("Message queue is full, skipping this message.")
