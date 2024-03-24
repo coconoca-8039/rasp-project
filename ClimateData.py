@@ -13,7 +13,7 @@ def insert_climate_data(
     create_climate_table_query = """
     CREATE TABLE IF NOT EXISTS ClimateData (
         DataId INTEGER PRIMARY KEY AUTOINCREMENT,
-        Timestamp TEXT NOT NULL,
+        Timestamp TEXT,
         Temperature REAL,
         Humidity REAL,
         Pressure REAL,
@@ -33,19 +33,21 @@ def insert_climate_data(
     timestamp_str = str(timestamp)
 
     try:
-        cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (timestamp_str)")
+        cursor.execute("INSERT INTO ClimateData (Timestamp, Temperature, Humidity, Pressure, Latitude, Longitude, Elevation, SatelliteCount, 			XDirection, YDirection, ZDirection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (timestamp_str, temperature, humidity, pressure, 		latitude, longitude, elevation, satellite_count, x_direction, y_direction, z_direction))
+
+        #cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (?)", (timestamp_str,)) 
         # cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (CURRENT_TIMESTAMP)")            # Timestampの挿入
         # cursor.execute("INSERT INTO ClimateData (Timestamp) VALUES (datetime(CURRENT_TIMESTAMP, '+9 hours'))")
-        cursor.execute("INSERT INTO ClimateData (Temperature) VALUES (?)", (temperature,))          # Temperatureの挿入
-        cursor.execute("INSERT INTO ClimateData (Humidity) VALUES (?)", (humidity,))                # Humidityの挿入
-        cursor.execute("INSERT INTO ClimateData (Pressure) VALUES (?)", (pressure,))                # Pressureの挿入
-        cursor.execute("INSERT INTO ClimateData (Latitude) VALUES (?)", (latitude,))                # Latitudeの挿入
-        cursor.execute("INSERT INTO ClimateData (Longitude) VALUES (?)", (longitude,))              # Longitudeの挿入
-        cursor.execute("INSERT INTO ClimateData (Elevation) VALUES (?)", (elevation,))              # Elevationの挿入
-        cursor.execute("INSERT INTO ClimateData (SatelliteCount) VALUES (?)", (satellite_count,))   # SatelliteCountの挿入
-        cursor.execute("INSERT INTO ClimateData (XDirection) VALUES (?)", (x_direction,))           # XDirectionの挿入
-        cursor.execute("INSERT INTO ClimateData (YDirection) VALUES (?)", (y_direction,))           # YDirectionの挿入
-        cursor.execute("INSERT INTO ClimateData (ZDirection) VALUES (?)", (z_direction,))           # ZDirectionの挿入
+        #cursor.execute("INSERT INTO ClimateData (Temperature) VALUES (?)", (temperature,))          # Temperatureの挿入
+        #cursor.execute("INSERT INTO ClimateData (Humidity) VALUES (?)", (humidity,))                # Humidityの挿入
+        #cursor.execute("INSERT INTO ClimateData (Pressure) VALUES (?)", (pressure,))                # Pressureの挿入
+        #cursor.execute("INSERT INTO ClimateData (Latitude) VALUES (?)", (latitude,))                # Latitudeの挿入
+        #cursor.execute("INSERT INTO ClimateData (Longitude) VALUES (?)", (longitude,))              # Longitudeの挿入
+        #cursor.execute("INSERT INTO ClimateData (Elevation) VALUYuES (?)", (elevation,))              # Elevationの挿入
+        #cursor.execute("INSERT INTO ClimateData (SatelliteCount) VALUES (?)", (satellite_count,))   # SatelliteCountの挿入
+        #cursor.execute("INSERT INTO ClimateData (XDirection) VALUES (?)", (x_direction,))           # XDirectionの挿入
+        #cursor.execute("INSERT INTO ClimateData (YDirection) VALUES (?)", (y_direction,))           # YDirectionの挿入
+        #cursor.execute("INSERT INTO ClimateData (ZDirection) VALUES (?)", (z_direction,))           # ZDirectionの挿入
 
     except sqlite3.Error as e:
     	print(f"SQLite error: {e}")
