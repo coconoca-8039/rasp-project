@@ -34,6 +34,7 @@ def handle_client(mq):
     executed = False
     target_time = datetime.now() + timedelta(seconds=15)
     start_time = time.time()
+    MAX_DATA_AVERAGE = 30
     
     while True:
         try:
@@ -115,55 +116,55 @@ def handle_client(mq):
             print(can_1888DDDD + can_1777DDDD)
             print("")
             
-            # リストのデータ数を10件に保つ処理
+            # リストのデータ数をMAX_DATA_AVERAGE件に保つ処理
             mean_tempture = round(sum(tempture_avg) / len(tempture_avg), 2)
             print(f"温度の平均：{mean_tempture}")
-            if len(tempture_avg) > 10:
+            if len(tempture_avg) > MAX_DATA_AVERAGE:
             	tempture_avg.pop(0)
             	
             mean_humidity = round(sum(humidity_avg) / len(humidity_avg), 2)
             print(f"湿度の平均：{mean_humidity}")
-            if len(humidity_avg) > 10:
+            if len(humidity_avg) > MAX_DATA_AVERAGE:
             	humidity_avg.pop(0)
             	
             mean_pressure = round(sum(pressure_avg) / len(pressure_avg), 2)
             print(f"気圧の平均：{mean_pressure}")
-            if len(pressure_avg) > 10:
+            if len(pressure_avg) > MAX_DATA_AVERAGE:
             	pressure_avg.pop(0)
             	
             mean_latitude = round(sum(latitude_avg) / len(latitude_avg), 2)
             print(f"緯度の平均：{mean_latitude}")
-            if len(latitude_avg) > 10:
+            if len(latitude_avg) > MAX_DATA_AVERAGE:
             	latitude_avg.pop(0)
             	
             mean_longitude = round(sum(longitude_avg) / len(longitude_avg), 2)
             print(f"経度の平均：{mean_longitude}")
-            if len(longitude_avg) > 10:
+            if len(longitude_avg) > MAX_DATA_AVERAGE:
             	longitude_avg.pop(0)
             	
             mean_elevation = round(sum(elevation_avg) / len(elevation_avg), 2)
             print(f"標高の平均：{mean_elevation}")
-            if len(elevation_avg) > 10:
+            if len(elevation_avg) > MAX_DATA_AVERAGE:
             	elevation_avg.pop(0)
             	
             mean_satellite_count = round(sum(satellite_count_avg) / len(satellite_count_avg), 2)
             print(f"衛星捕捉の平均：{mean_satellite_count}")
-            if len(satellite_count_avg) > 10:
+            if len(satellite_count_avg) > MAX_DATA_AVERAGE:
             	satellite_count_avg.pop(0)
             	
             mean_x_direction = round(sum(x_direction_avg) / len(x_direction_avg), 2)
             print(f"X方向の平均：{mean_x_direction}")
-            if len(x_direction_avg) > 10:
+            if len(x_direction_avg) > MAX_DATA_AVERAGE:
             	x_direction_avg.pop(0)
             	
             mean_y_direction = round(sum(y_direction_avg) / len(y_direction_avg), 2)
             print(f"Y方向の平均：{mean_y_direction}")
-            if len(y_direction_avg) > 10:
+            if len(y_direction_avg) > MAX_DATA_AVERAGE:
             	y_direction_avg.pop(0)
             	
             mean_z_direction = round(sum(z_direction_avg) / len(z_direction_avg), 2)
             print(f"Z方向の平均：{mean_z_direction}")
-            if len(z_direction_avg) > 10:
+            if len(z_direction_avg) > MAX_DATA_AVERAGE:
             	z_direction_avg.pop(0)
             
             

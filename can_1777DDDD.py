@@ -19,11 +19,11 @@ def can_get_1777DDDD(can_data, target):
 	latitude_byte3 = int(can_data[10], 16)
 	latitude_byte4 = int(can_data[11], 16)
 	
-	longitude = (longitude_byte1 << 24) | (longitude_byte2 << 16) | (longitude_byte3 << 8) | longitude_byte1
+	longitude = (longitude_byte1 << 24) | (longitude_byte2 << 16) | (longitude_byte3 << 8) | longitude_byte4
 	longitude = longitude / 1000000
 	longitude = f"経度：{longitude}"
 	
-	latitude = (latitude_byte1 << 24) | (latitude_byte2 << 16) | (latitude_byte3 << 8) | latitude_byte1
+	latitude = (latitude_byte1 << 24) | (latitude_byte2 << 16) | (latitude_byte3 << 8) | latitude_byte4
 	latitude = latitude / 1000000
 	latitude = f"緯度：{latitude}"
 	
